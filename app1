@@ -1,0 +1,105 @@
+import streamlit as st
+import pydeck as pdk
+import pandas as pd
+import numpy as np
+import time
+
+st.set_page_config(layout="wide")
+st.title("🚑 Live Ambulance Movement (Smooth Map)")
+
+# Location (Hyderabad)
+lat, lon = 17.3850, 78.4867
+
+# Accident location
+accident_lat, accident_lon = lat, lon
+
+# Ambulance start location
+start_lat, start_lon = lat + 0.02, lon + 0.02
+
+# Create smooth route
+steps = 200
+route_lats = np.linspace(start_lat, accident_lat, steps)
+route_lons = np.linspace(start_lon, accident_lon, steps)
+
+# Traffic points
+traffic = pd.DataFrame({
+    "lat": lat + np.random.uniform(-0.02, 0.02, 50),
+    "lon": lon + np.random.uniform(-0.02, 0.02, 50)
+})
+
+if st.button("🚨 Start Live Movement"):
+
+    st.success("Accident Detected! Dispatching Ambulance...")
+
+    placeholder = st.empty()
+
+    for i in range(steps):
+
+        # Current ambulance position
+        ambulance = pd.DataFrame({
+            "lat": [route_lats[i]],
+            "lon": [route_lons[i]]
+        })
+
+        # Route path till now
+        route_path = pd.DataFrame({
+            "lat": route_lats[:i+1],
+            "lon": route_lons[:i+1]
+        })
+
+        deck = pdk.Deck(
+            map_style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+            initial_view_state=pdk.ViewState(
+                latitude=lat,
+                longitude=lon,
+                zoom=14,
+                pitch=45,
+            ),
+            layers=[
+
+                # 🚗 Traffic
+                pdk.Layer(
+                    "ScatterplotLayer",
+                    traffic,
+                    get_position="[lon, lat]",
+                    get_color="[255, 165, 0]",
+                    get_radius=80,
+                ),
+
+                # 🚨 Accident
+                pdk.Layer(
+                    "ScatterplotLayer",
+                    pd.DataFrame({"lat":[accident_lat],"lon":[accident_lon]}),
+                    get_position="[lon, lat]",
+                    get_color="[255, 0, 0]",
+                    get_radius=250,
+                ),
+
+                # 🚑 Ambulance (MOVING)
+                pdk.Layer(
+                    "ScatterplotLayer",
+                    ambulance,
+                    get_position="[lon, lat]",
+                    get_color="[0, 0, 255]",
+                    get_radius=250,
+                ),
+
+                # 🛣️ Route Line
+                pdk.Layer(
+                    "PathLayer",
+                    data=[{
+                        "path": list(zip(route_path["lon"], route_path["lat"]))
+                    }],
+                    get_path="path",
+                    get_color="[0, 0, 255]",
+                    width_scale=5,
+                    width_min_pixels=3,
+                ),
+            ],
+        )
+
+        placeholder.pydeck_chart(deck)
+
+        time.sleep(0.03)   # smooth animation
+
+    st.success("🚑 Ambulance Reached Accident!")
