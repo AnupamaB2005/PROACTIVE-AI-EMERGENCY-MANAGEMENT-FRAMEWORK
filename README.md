@@ -1,6 +1,1 @@
- • Developed WorkNest, a full-stack website empowering 10,000+ informal workers globally with AI-driven job
- matching, digital payments, and upskilling, advancing financial inclusion.
- • Built front-end (HTML, JavaScript with React.js, Tailwind CSS) and back-end (Node.js, MongoDB), supporting
- 50,000+ annual work opportunities with AI integration (Python, TensorFlow).
- • Ranked top 7 at BizHack 2025 among 100+ teams, delivering a scalable solution projected to boost worker
- incomes by 30# -WORKNEST-EMPOWERING-LIVELIHOODS-GLOBALLY.
+ Developed an AI-powered intelligent transportation safety system aimed at reducing accident impact and improving emergency response efficiency for heavy vehicles. Implemented anomaly detection models using Isolation Forest and Autoencoders to identify risks such as overspeeding, overheating, brake failure, and lane drifting from telemetry data. Built CNN-based accident severity prediction models using TensorFlow, Keras, and OpenCV, along with Scikit-learn regression models for hospital load forecasting and passenger occupancy estimation. Designed a smart ambulance coordination framework using NetworkX, Dijkstra/A* algorithms, and Multi-Agent Reinforcement Learning for dynamic route optimization and emergency vehicle allocation. Integrated SHAP explainability for transparent decision-making, Twilio/SMTP for real-time alerts, and a Streamlit dashboard for live visualization of incidents, ambulance routes, and hospital availability to support faster and more efficient rescue operations.
